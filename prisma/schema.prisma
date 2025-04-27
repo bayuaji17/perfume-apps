@@ -1,0 +1,79 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+
+model Perfume {
+  id              String @id @default(cuid())
+  name            String
+  description     String?
+  concentration   ConcentrationType
+  sizeML          Int
+  price           Decimal
+  brandId         String
+  brand           Brand @relation(fields: [brandId], references: [id])
+  gender          GenderCategory
+  images          PerfumeImage[]
+  notes           PerfumeNote[]
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime?  @updatedAt
+
+  @@unique([name,brandId])
+  @@index([gender])
+  @@index([brandId])
+
+}
+
+model PerfumeImage {
+  id            String @id @default(cuid())
+  imageUrl      String
+  displayOrder  Int @default(0)
+
+  perfumeId     String
+  perfume       Perfume @relation(fields: [perfumeId], references: [id], onDelete: Cascade)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime? @updatedAt
+
+  @@index([perfumeId])
+  @@unique([perfumeId, displayOrder])
+}
+
+model PerfumeNote {
+  id              String  @id @default(cuid())
+  perfumeId       String
+  role            NoteRole
+  description     String  
+  perfume          Perfume @relation(fields: [perfumeId], references: [id], onDelete: Cascade)
+  @@unique([perfumeId, role])
+
+}
+model Brand {
+  id                  String @id @default(cuid())
+  name                String @unique
+  perfumes            Perfume[]
+  createdAt           DateTime            @default(now())
+  updatedAt           DateTime?           @updatedAt
+}
+
+enum ConcentrationType {
+  edp           
+  edt        
+  edc     
+}
+
+enum GenderCategory {
+  female
+  male
+  unisex
+}
+
+enum NoteRole {
+  top
+  middle
+  base
+}
