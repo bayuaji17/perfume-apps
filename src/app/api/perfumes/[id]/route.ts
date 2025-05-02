@@ -49,6 +49,14 @@ export async function GET(
             description: true,
           },
         },
+        checkoutLinks:{
+          select:{
+            id:true,
+            type:true,
+            link:true,
+            status:true,
+          }
+        }
       },
     });
 
@@ -69,8 +77,8 @@ export async function PATCH(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
-    const unauthorized = await ProtectApi(req);
-    if (unauthorized) return unauthorized;
+  const unauthorized = await ProtectApi(req);
+  if (unauthorized) return unauthorized;
   const uploadedImages: { imageUrl: string; displayOrder: number }[] = [];
   const { id } = await params;
 
@@ -193,7 +201,14 @@ export async function PATCH(
       });
     });
 
-    return NextResponse.json(updatedPerfume, { status: 200 });
+    return NextResponse.json(
+      {
+        success: true,
+        data: `${updatedPerfume.name}`,
+        message: "Perfume has been successfully updated",
+      },
+      { status: 200 }
+    );
   } catch (error) {
     console.error("[PERFUME_PATCH_ERROR]", error);
 
@@ -221,18 +236,18 @@ export async function DELETE(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
-    const unauthorized = await ProtectApi(req);
-    if (unauthorized) return unauthorized;
+  const unauthorized = await ProtectApi(req);
+  if (unauthorized) return unauthorized;
   try {
     const { id } = await params;
-    const deletedBrand = await prisma.perfume.delete({
+    const deletedPerfume = await prisma.perfume.delete({
       where: { id },
     });
     return NextResponse.json(
       {
         success: true,
-        data: deletedBrand,
-        message: "Perfume deleted Successfully",
+        data: deletedPerfume,
+        message: `${deletedPerfume.name} has been successfully deleted`,
       },
       { status: 200 }
     );

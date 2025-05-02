@@ -11,7 +11,7 @@ import {
   SidebarMenuItem,
   SidebarRail,
 } from "@/components/ui/sidebar";
-import { Component, LayoutDashboard, PackageSearch } from "lucide-react";
+import { Component, LayoutDashboard, PackageSearch,Link2 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 // import { Button } from "../ui/button";
@@ -33,6 +33,11 @@ const data = [
     title: "Brand",
     url: "/dashboard/brands",
     icon: Component,
+  },
+  {
+    title: "Checkout Links",
+    url: "/dashboard/checkout-links",
+    icon: Link2,
   },
 ];
 

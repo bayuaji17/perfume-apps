@@ -2,7 +2,7 @@ import { z } from "zod";
 import { ConcentrationType, GenderCategory, NoteRole } from "@prisma/client";
 export const perfumeNoteSchema = z.object({
   role: z.nativeEnum(NoteRole),
-  description: z.string().min(1, "Note description is required"),
+  description: z.string().min(1, { message: "Note description is required" }),
 });
 
 export const perfumeScheme = z.object({
@@ -59,5 +59,29 @@ export const formScheme = z.object({
         description: z.string().min(1, "Description notes is required"),
       })
     )
-    .length(3, "Exactly 3 notes are required"), 
+    .length(3, "Exactly 3 notes are required"),
+});
+
+export const CheckoutLinkSchema = z.object({
+  type: z.enum(["lazada", "shopee", "tokopedia", "whatsapp"]),
+  link: z.string().url("Link must be a valid URL"),
+  status: z.enum(["active", "archive"]).optional(),
+});
+
+
+export const COPerfumeScheme = z.object({
+  perfumeId: z.string().min(20, { message: "Perfume id is required" }),
+  links: z
+    .array(CheckoutLinkSchema)
+    .min(1, { message: "At least one link must be provided" })
+    .refine(
+      (links) => {
+        const types = links.map((l) => l.type);
+        return new Set(types).size === types.length; // check for duplicates
+      },
+      {
+        message: "Duplicate type detected in links",
+      }
+    ),
+  
 });

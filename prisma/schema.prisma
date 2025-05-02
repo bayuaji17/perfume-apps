@@ -20,6 +20,7 @@ model Perfume {
   gender          GenderCategory
   images          PerfumeImage[]
   notes           PerfumeNote[]
+  checkoutLinks   CheckoutLink[]
   createdAt       DateTime @default(now())
   updatedAt       DateTime?  @updatedAt
 
@@ -60,6 +61,19 @@ model Brand {
   updatedAt           DateTime?           @updatedAt
 }
 
+model CheckoutLink {
+  id            String @id @default(cuid())
+  perfumeId     String
+  perfume       Perfume  @relation(fields: [perfumeId], references: [id], onDelete: Cascade)
+  type          COType
+  link          String
+  status        Status @default(active)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  @@index([perfumeId])
+  @@unique([perfumeId, type])
+}
+
 enum ConcentrationType {
   edp           
   edt        
@@ -76,4 +90,15 @@ enum NoteRole {
   top
   middle
   base
+}
+
+enum COType {
+  lazada
+  shopee
+  tokopedia
+  whatsapp
+}
+enum Status {
+  active
+  archive
 }

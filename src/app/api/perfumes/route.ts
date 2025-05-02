@@ -89,9 +89,8 @@ export async function GET(req: NextRequest) {
 
 // Create Perfume
 export async function POST(req: NextRequest) {
-
-    const unauthorized = await ProtectApi(req);
-    if (unauthorized) return unauthorized;
+  const unauthorized = await ProtectApi(req);
+  if (unauthorized) return unauthorized;
 
   const uploadedImages: { imageUrl: string; displayOrder: number }[] = [];
 
@@ -142,7 +141,6 @@ export async function POST(req: NextRequest) {
 
     const { data } = parsed;
 
-    // Optional: Cek jika parfum sudah ada (hindari duplicate)
     const existing = await prisma.perfume.findFirst({
       where: { name: data.name, brandId: data.brandId },
     });
@@ -201,7 +199,14 @@ export async function POST(req: NextRequest) {
       });
     });
 
-    return NextResponse.json(perfume, { status: 201 });
+    return NextResponse.json(
+      {
+        success: true,
+        data: perfume,
+        message: "Perfume has been successfully created",
+      },
+      { status: 201 }
+    );
   } catch (error) {
     console.error("[PERFUME_CREATE_ERROR]", error);
 
