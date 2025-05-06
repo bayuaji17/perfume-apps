@@ -26,7 +26,7 @@ import {
 } from "@/components/ui/popover";
 import useDebounce from "@/hooks/use-debounce";
 import { usePerfumes, usePerfumesById } from "@/hooks/use-perfumes";
-import { Perfumes } from "@/lib/types/inteface";
+import { CheckoutLink, Perfumes } from "@/lib/types/inteface";
 import { cn } from "@/lib/utils";
 import {
   Table,
@@ -36,12 +36,19 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import AddLink from "./add-link";
+import EditLink from "./edit-link";
+import DeleteLink from "./delete-link";
 
 export default function CheckoutTable() {
   const [search, setSearch] = useState("");
   const [selectedPerfumeId, setSelectedPerfumeId] = useState<string | null>(
     null
   );
+  const [addLinkDialog, setAddLinkDialog] = useState<boolean>(false);
+  const [editLinkDialog, setEditLinkDialog] = useState<boolean>(false);
+  const [deleteLinkDialog, setDeleteLinkDialog] = useState<boolean>(false);
+  const [selectedLink, setSelectedLink] = useState<CheckoutLink | null>(null);
 
   const debounceSearch = useDebounce(search, 300);
 
@@ -57,9 +64,24 @@ export default function CheckoutTable() {
   );
   const { data: dataPerfumeById, isLoading: isPerfumeDetailLoading } =
     usePerfumesById(selectedPerfumeId);
-
   return (
     <div className="space-y-6">
+      <AddLink
+        perfumeId={selectedPerfumeId}
+        open={addLinkDialog}
+        setOpen={setAddLinkDialog}
+      />
+      <EditLink
+        perfumeId={selectedPerfumeId}
+        checkoutLink={selectedLink}
+        open={editLinkDialog}
+        setOpen={setEditLinkDialog}
+      />
+      <DeleteLink
+        coLink={selectedLink}
+        open={deleteLinkDialog}
+        setOpen={setDeleteLinkDialog}
+      />
       <h1 className="text-xl font-bold">Checkout Table</h1>
       <div className="flex gap-2">
         <Popover>
@@ -118,7 +140,18 @@ export default function CheckoutTable() {
             </Command>
           </PopoverContent>
         </Popover>
-        <Button className="w-40">Add Link</Button>
+        {dataPerfumeById?.checkoutLinks?.length ?? 0 ? (
+          <Button
+            className="w-40"
+            onClick={() => {
+              setAddLinkDialog(true);
+            }}
+          >
+            Add Link
+          </Button>
+        ) : (
+          <></>
+        )}
       </div>
       {isPerfumeDetailLoading ? (
         <div className="flex justify-center items-center py-8">
@@ -139,7 +172,9 @@ export default function CheckoutTable() {
               <TableBody>
                 {dataPerfumeById?.checkoutLinks.map((c) => (
                   <TableRow key={c.id} className="border-black">
-                    <TableCell className="capitalize pl-10">{c.type}</TableCell>
+                    <TableCell className="capitalize pl-10">
+                      {c.platform}
+                    </TableCell>
                     <TableCell>
                       <a
                         href={c.link}
@@ -160,10 +195,22 @@ export default function CheckoutTable() {
                     </TableCell>
                     <TableCell>
                       <div className="flex gap-2 justify-center">
-                        <Button variant="outline">
+                        <Button
+                          variant="outline"
+                          onClick={() => {
+                            setSelectedLink(c);
+                            setEditLinkDialog(true);
+                          }}
+                        >
                           <Pen />
                         </Button>
-                        <Button variant="destructive">
+                        <Button
+                          variant="destructive"
+                          onClick={() => {
+                            setSelectedLink(c);
+                            setDeleteLinkDialog(true);
+                          }}
+                        >
                           <Trash />
                         </Button>
                       </div>
@@ -182,7 +229,12 @@ export default function CheckoutTable() {
             <p className="text-muted-foreground">
               This perfume doesn&apos;t have any checkout links yet.
             </p>
-            <Button className="mt-4">
+            <Button
+              className="mt-4"
+              onClick={() => {
+                setAddLinkDialog(true);
+              }}
+            >
               <Plus className="mr-2 h-4 w-4" />
               Add Checkout Link
             </Button>

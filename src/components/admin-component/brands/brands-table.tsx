@@ -29,7 +29,6 @@ import {
 import { Input } from "@/components/ui/input";
 import { useBrands } from "@/hooks/use-brands";
 import useDebounce from "@/hooks/use-debounce";
-// import DeleteBrand from "./delete-brand";
 import { Button } from "@/components/ui/button";
 import TableLoading from "../table-skeleton";
 import { Brands, Params } from "@/lib/types/inteface";
@@ -83,10 +82,7 @@ export default function Brand() {
   const totalPages = data?.data.totalPages || (0 as number);
 
   const startItem = (params.currentPage - 1) * params.pageSize + 1;
-  const endItem = Math.min(
-    params.currentPage * params.pageSize,
-    totalCount
-  );
+  const endItem = Math.min(params.currentPage * params.pageSize, totalCount);
 
   return (
     <>
@@ -127,35 +123,33 @@ export default function Brand() {
             {isLoading ? (
               <TableLoading rowCount={10} columnCount={4} />
             ) : brands.length > 0 ? (
-              brands.map((brand:Brands, index:number) => (
+              brands.map((brand: Brands, index: number) => (
                 <TableRow key={brand.id} className="border-black">
                   <TableCell className="h-14 text-center">
-                    {(params.currentPage - 1) * params.pageSize +
-                      index +
-                      1}
+                    {(params.currentPage - 1) * params.pageSize + index + 1}
                   </TableCell>
                   <TableCell>{brand.id}</TableCell>
                   <TableCell>{brand.name}</TableCell>
                   <TableCell>
                     <span className="flex items-center justify-center space-x-2">
-                      <Pen
-                        size={20}
-                        strokeWidth="1.5px"
-                        className="cursor-pointer hover:text-green-500"
+                      <Button
+                        variant={"outline"}
                         onClick={() => {
                           setSelectedBrand(brand);
                           setEditDialog(true);
                         }}
-                      />
-                      <Trash
-                        size={20}
-                        strokeWidth="1.5px"
-                        className="cursor-pointer hover:text-red-500"
+                      >
+                        <Pen />
+                      </Button>
+                      <Button
+                        variant="destructive"
                         onClick={() => {
                           setSelectedBrand(brand);
                           setDeleteDialog(true);
                         }}
-                      />
+                      >
+                        <Trash />
+                      </Button>
                     </span>
                   </TableCell>
                 </TableRow>
@@ -194,37 +188,37 @@ export default function Brand() {
             Showing {startItem} - {endItem} of {totalCount}
           </span>
         </div>
-            <div className="flex self-end gap-1">
-            <Button
-                variant="outline"
-                onClick={() => gotoPage(1)}
-                disabled={params.currentPage === 1}
-            >
-                <ChevronsLeft />
-            </Button>
-            <Button
-                variant="outline"
-                onClick={() => gotoPage(params.currentPage - 1)}
-                disabled={params.currentPage === 1}
-            >
-                <ChevronLeft />
-            </Button>
-            <Button>{params.currentPage}</Button>
-            <Button
-                variant="outline"
-                onClick={() => gotoPage(params.currentPage + 1)}
-                disabled={params.currentPage >= totalPages}
-            >
-                <ChevronRight />
-            </Button>
-            <Button
-                variant="outline"
-                onClick={() => gotoPage(totalPages)}
-                disabled={params.currentPage >= totalPages}
-            >
-                <ChevronsRight />
-            </Button>
-            </div>
+        <div className="flex self-end gap-1">
+          <Button
+            variant="outline"
+            onClick={() => gotoPage(1)}
+            disabled={params.currentPage === 1}
+          >
+            <ChevronsLeft />
+          </Button>
+          <Button
+            variant="outline"
+            onClick={() => gotoPage(params.currentPage - 1)}
+            disabled={params.currentPage === 1}
+          >
+            <ChevronLeft />
+          </Button>
+          <Button>{params.currentPage}</Button>
+          <Button
+            variant="outline"
+            onClick={() => gotoPage(params.currentPage + 1)}
+            disabled={params.currentPage >= totalPages}
+          >
+            <ChevronRight />
+          </Button>
+          <Button
+            variant="outline"
+            onClick={() => gotoPage(totalPages)}
+            disabled={params.currentPage >= totalPages}
+          >
+            <ChevronsRight />
+          </Button>
+        </div>
       </div>
     </>
   );

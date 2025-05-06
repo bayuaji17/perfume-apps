@@ -1,6 +1,9 @@
 import { ProtectApi } from "@/lib/auth-protect";
 import { prisma } from "@/lib/prisma";
-import { COPerfumeScheme } from "@/lib/zod-scheme/perfume-scheme";
+import {
+  COLinkSchemeEditDetails,
+  COPerfumeScheme,
+} from "@/lib/zod-scheme/perfume-scheme";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
@@ -25,7 +28,7 @@ export async function POST(req: NextRequest) {
     const existing = await prisma.checkoutLink.findMany({
       where: {
         perfumeId,
-        type: { in: links.map((link) => link.type) },
+        platform: { in: links.map((link) => link.platform) },
       },
     });
 
@@ -35,8 +38,8 @@ export async function POST(req: NextRequest) {
           success: false,
           error: "Duplicate entry",
           details: {
-            type: existing.map(
-              (e) => `${e.type} link already exists for this perfume,`
+            platform: existing.map(
+              (e) => `${e.platform} link already exists for this perfume,`
             ),
           },
         },
@@ -47,7 +50,7 @@ export async function POST(req: NextRequest) {
     const COPerfume = await prisma.checkoutLink.createMany({
       data: links.map((link) => ({
         perfumeId,
-        type: link.type,
+        platform: link.platform,
         link: link.link,
       })),
     });
@@ -77,7 +80,7 @@ export async function PATCH(req: NextRequest) {
 
   try {
     const body = await req.json();
-    const validationResult = COPerfumeScheme.safeParse(body);
+    const validationResult = COLinkSchemeEditDetails.safeParse(body);
 
     if (!validationResult.success) {
       return NextResponse.json(
@@ -89,40 +92,16 @@ export async function PATCH(req: NextRequest) {
         { status: 400 }
       );
     }
-
-    const { perfumeId, links } = validationResult.data;
-
-    for (const link of links) {
-      // Cek apakah data sudah ada
-      const existing = await prisma.checkoutLink.findFirst({
-        where: {
-          perfumeId,
-          type: link.type,
-        },
-      });
-
-      if (existing) {
-        // Update jika sudah ada
-        await prisma.checkoutLink.update({
-          where: { id: existing.id },
-          data: {
-            link: link.link,
-            status: link.status ?? "active",
-          },
-        });
-      } else {
-        // Tambah baru jika belum ada
-        await prisma.checkoutLink.create({
-          data: {
-            perfumeId,
-            type: link.type,
-            link: link.link,
-            status: link.status ?? "active",
-          },
-        });
-      }
-    }
-
+    await prisma.checkoutLink.update({
+      where: {
+        perfumeId: validationResult.data.perfumeId,
+        id: validationResult.data.id,
+      },
+      data: {
+        link: validationResult.data.link,
+        status: validationResult.data.status,
+      },
+    });
     return NextResponse.json({
       success: true,
       message: "Checkout links updated successfully",
@@ -145,33 +124,19 @@ export async function DELETE(req: NextRequest) {
 
   try {
     const body = await req.json();
-    const { perfumeId, types } = body;
+    const { perfumeId, id } = body;
 
-    if (!perfumeId || !Array.isArray(types) || types.length === 0) {
-      return NextResponse.json(
-        {
-          success: false,
-          error: "Validation failed",
-          details: {
-            perfumeId: perfumeId ? undefined : ["Perfume ID is required"],
-            types: types.length === 0 ? ["At least one type must be provided"] : undefined,
-          },
-        },
-        { status: 400 }
-      );
-    }
-
-    const deleted = await prisma.checkoutLink.deleteMany({
+    const deleted = await prisma.checkoutLink.delete({
       where: {
-        perfumeId,
-        type: { in: types },
+        perfumeId: perfumeId,
+        id: id,
       },
     });
 
     return NextResponse.json({
       success: true,
       data: deleted,
-      message: "Checkout link(s) deleted successfully",
+      message: "Checkout link deleted successfully",
     });
   } catch (error) {
     console.error(error);

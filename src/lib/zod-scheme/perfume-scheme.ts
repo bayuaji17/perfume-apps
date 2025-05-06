@@ -63,11 +63,10 @@ export const formScheme = z.object({
 });
 
 export const CheckoutLinkSchema = z.object({
-  type: z.enum(["lazada", "shopee", "tokopedia", "whatsapp"]),
+  platform: z.enum(["lazada", "shopee", "tokopedia", "whatsapp", "tiktok"]),
   link: z.string().url("Link must be a valid URL"),
   status: z.enum(["active", "archive"]).optional(),
 });
-
 
 export const COPerfumeScheme = z.object({
   perfumeId: z.string().min(20, { message: "Perfume id is required" }),
@@ -76,12 +75,36 @@ export const COPerfumeScheme = z.object({
     .min(1, { message: "At least one link must be provided" })
     .refine(
       (links) => {
-        const types = links.map((l) => l.type);
-        return new Set(types).size === types.length; // check for duplicates
+        const platforms = links.map((l) => l.platform);
+        return new Set(platforms).size === platforms.length;
       },
       {
-        message: "Duplicate type detected in links",
+        message: "Duplicate platform detected in links",
       }
     ),
-  
+});
+
+export const COLinkSchemeInput = z.object({
+  perfumeId: z.string().min(20, { message: "Perfume id is required" }),
+  links: z
+    .array(
+      z.object({
+        platform: z.enum([
+          "whatsapp",
+          "shopee",
+          "tokopedia",
+          "lazada",
+          "tiktok",
+        ]),
+        link: z.string().url({ message: "Harus berupa URL valid" }),
+      })
+    )
+    .max(5, { message: "You can only provide up to 5 links" }),
+});
+
+export const COLinkSchemeEditDetails = z.object({
+  perfumeId: z.string().min(20, { message: "Perfume id is required" }),
+  id:z.string().min(20, { message: "id link  is required" }),
+  link: z.string().url({ message: "Must be a valid URL" }),
+  status: z.enum(["active", "archive"]),
 });

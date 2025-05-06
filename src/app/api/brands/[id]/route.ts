@@ -112,7 +112,7 @@ export async function DELETE(
     return NextResponse.json(
       {
         success: false,
-        error: "An unexpected error occurred while updating the brand",
+        error: "An unexpected error occurred while deleting the brand",
       },
       { status: 500 }
     );

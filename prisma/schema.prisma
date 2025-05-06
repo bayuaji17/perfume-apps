@@ -65,13 +65,13 @@ model CheckoutLink {
   id            String @id @default(cuid())
   perfumeId     String
   perfume       Perfume  @relation(fields: [perfumeId], references: [id], onDelete: Cascade)
-  type          COType
+  platform      COType
   link          String
   status        Status @default(active)
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
   @@index([perfumeId])
-  @@unique([perfumeId, type])
+  @@unique([perfumeId, platform])
 }
 
 enum ConcentrationType {
@@ -97,6 +97,7 @@ enum COType {
   shopee
   tokopedia
   whatsapp
+  tiktok
 }
 enum Status {
   active

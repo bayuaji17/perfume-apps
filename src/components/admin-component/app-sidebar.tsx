@@ -11,19 +11,17 @@ import {
   SidebarMenuItem,
   SidebarRail,
 } from "@/components/ui/sidebar";
-import { Component, LayoutDashboard, PackageSearch,Link2 } from "lucide-react";
+import { Component, PackageSearch, Link2 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-// import { Button } from "../ui/button";
-// import { signOut } from "next-auth/react";
 import LogoutButton from "./logout-button";
 
 const data = [
-  {
-    title: "Dashboard",
-    url: "/dashboard",
-    icon: LayoutDashboard,
-  },
+  // {
+  //   title: "Dashboard",
+  //   url: "/dashboard",
+  //   icon: LayoutDashboard,
+  // },
   {
     title: "Perfumes",
     url: "/dashboard/perfumes",
@@ -45,19 +43,22 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const pathname = usePathname();
   return (
     <Sidebar {...props}>
-      <SidebarHeader>
-        <h1>Zalisma Perfumes</h1>
+      <SidebarHeader className="text-center p-4">
+        <Link href={"/"}>
+          <h1>Zalisma Perfumes</h1>
+        </Link>
       </SidebarHeader>
       <SidebarContent>
         <SidebarMenu>
           {data.map((item) => (
             <SidebarMenuItem key={item.title} className={`px-2`}>
-              <SidebarMenuButton asChild className={`${
-                    pathname === item.url ? "bg-black text-white" : ""
-                  } hover:bg-black hover:text-white`}>
-                <Link
-                  href={item.url}
-                >
+              <SidebarMenuButton
+                asChild
+                className={`${
+                  pathname === item.url ? "bg-black text-white" : ""
+                } hover:bg-black hover:text-white`}
+              >
+                <Link href={item.url}>
                   <item.icon />
                   <span>{item.title}</span>
                 </Link>
@@ -66,10 +67,9 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           ))}
         </SidebarMenu>
       </SidebarContent>
-          <SidebarFooter>
-            <LogoutButton/>
-            {/* <Button variant={"destructive"} onClick={() => signOut()}>Logout</Button> */}
-          </SidebarFooter>
+      <SidebarFooter>
+        <LogoutButton />
+      </SidebarFooter>
       <SidebarRail />
     </Sidebar>
   );

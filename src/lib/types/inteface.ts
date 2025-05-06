@@ -1,7 +1,7 @@
 type ConcentrationType = "edp" | "edt" | "edc";
 type GenderCategory = "female" | "male" | "unisex";
 type NoteRole = "top" | "middle" | "base";
-type LinkType = "shopee" | "tokopedia" | "lazada" | "whatsapp";
+type LinkType = "shopee" | "tokopedia" | "lazada" | "whatsapp" | "tiktok";
 type LinkStatus = "active" | "archive";
 export interface Brands {
   id: string;
@@ -41,7 +41,7 @@ export interface Perfumes {
 export interface CheckoutLink {
   id: string;
   perfumeId: string;
-  type: LinkType;
+  platform: LinkType;
   link: string;
   status: LinkStatus;
   createdAt: string;

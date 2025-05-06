@@ -8,7 +8,7 @@ CREATE TYPE "GenderCategory" AS ENUM ('female', 'male', 'unisex');
 CREATE TYPE "NoteRole" AS ENUM ('top', 'middle', 'base');
 
 -- CreateEnum
-CREATE TYPE "COType" AS ENUM ('lazada', 'shopee', 'tokopedia', 'whatsapp');
+CREATE TYPE "COType" AS ENUM ('lazada', 'shopee', 'tokopedia', 'whatsapp', 'tiktok');
 
 -- CreateEnum
 CREATE TYPE "Status" AS ENUM ('active', 'archive');
@@ -65,7 +65,7 @@ CREATE TABLE "Brand" (
 CREATE TABLE "CheckoutLink" (
     "id" TEXT NOT NULL,
     "perfumeId" TEXT NOT NULL,
-    "type" "COType" NOT NULL,
+    "platform" "COType" NOT NULL,
     "link" TEXT NOT NULL,
     "status" "Status" NOT NULL DEFAULT 'active',
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -99,7 +99,7 @@ CREATE UNIQUE INDEX "Brand_name_key" ON "Brand"("name");
 CREATE INDEX "CheckoutLink_perfumeId_idx" ON "CheckoutLink"("perfumeId");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "CheckoutLink_perfumeId_type_key" ON "CheckoutLink"("perfumeId", "type");
+CREATE UNIQUE INDEX "CheckoutLink_perfumeId_platform_key" ON "CheckoutLink"("perfumeId", "platform");
 
 -- AddForeignKey
 ALTER TABLE "Perfume" ADD CONSTRAINT "Perfume_brandId_fkey" FOREIGN KEY ("brandId") REFERENCES "Brand"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

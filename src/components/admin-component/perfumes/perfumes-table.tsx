@@ -14,7 +14,7 @@ import {
   ChevronRight,
   ChevronsLeft,
   ChevronsRight,
-  Eye,
+  // Eye,
   Pen,
   Search,
   Trash,
@@ -115,7 +115,7 @@ export default function PerfumesTable() {
       <div className="w-full overflow-auto rounded-lg border-1 my-2 border-black">
         <Table>
           <TableHeader className="bg-gray-100 h-16">
-            <TableRow  className="border-b-2 border-black">
+            <TableRow className="border-b-2 border-black">
               <TableHead>No</TableHead>
               <TableHead>Perfumes Image</TableHead>
               <TableHead>Perfume Name</TableHead>
@@ -164,32 +164,32 @@ export default function PerfumesTable() {
                   <TableCell>{formatDate(perfumes.updatedAt)}</TableCell>
                   <TableCell>
                     <span className="flex items-center justify-center space-x-2">
-                      <Link href={`/dashboard/perfumes/${perfumes.id}`}>
+                      {/* <Link href={`/dashboard/perfumes/${perfumes.id}`}>
                         <Eye
                           size={20}
                           strokeWidth="1.5px"
                           className="cursor-pointer hover:text-blue-500"
                         />
-                      </Link>
-                      <Pen
-                        size={20}
-                        strokeWidth="1.5px"
-                        className="cursor-pointer hover:text-green-500"
+                      </Link> */}
+                      <Button
+                        variant={"outline"}
                         onClick={() => {
                           router.push(
                             `/dashboard/perfumes/${perfumes.id}/edit`
                           );
                         }}
-                      />
-                      <Trash
-                        size={20}
-                        strokeWidth="1.5px"
-                        className="cursor-pointer hover:text-red-500"
+                      >
+                        <Pen />
+                      </Button>
+                      <Button
+                        variant={"destructive"}
                         onClick={() => {
                           setSelectedPerfume(perfumes);
                           setDeleteDialog(true);
                         }}
-                      />
+                      >
+                        <Trash />
+                      </Button>
                     </span>
                   </TableCell>
                 </TableRow>

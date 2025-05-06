@@ -51,8 +51,9 @@ export async function GET(
         },
         checkoutLinks:{
           select:{
+            perfumeId:true,
             id:true,
-            type:true,
+            platform:true,
             link:true,
             status:true,
           }
