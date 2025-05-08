@@ -15,9 +15,11 @@ import {
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import Container from "./container";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 export default function Navbar() {
   const isMobile = useIsMobile();
+  const pathname = usePathname();
 
   return (
     <nav className="font-sans border-b-2 border-black z-50 sticky top-0 bg-white/70 backdrop-blur-lg">
@@ -31,13 +33,42 @@ export default function Navbar() {
         {/* Desktop Menu */}
         <div className="hidden md:flex">
           <ul className="flex items-center justify-between space-x-4 uppercase font-semibold text-lg">
-            <li className="hover:underline">
-              <Link href={"/collections"}>Collections</Link>
+            <li className={"inline-block cursor-pointer group"}>
+              <Link
+                className="relative inline-block z-10"
+                href={"/collections"}
+              >
+                Collections
+                <span
+                  className={`
+        absolute left-0 bottom-0 h-0.5 w-full origin-left bg-black 
+        transition-transform duration-300
+        ${
+          pathname === "/collections"
+            ? "scale-x-100"
+            : "scale-x-0 group-hover:scale-x-100"
+        }
+      `}
+                ></span>
+              </Link>
             </li>
-            <li className="hover:underline">
-              <Link href={"/about"}>About</Link>
+            <li className={"inline-block cursor-pointer group"}>
+              <Link className="relative inline-block z-10" href={"/about"}>
+                About
+                <span
+                  className={`
+        absolute left-0 bottom-0 h-0.5 w-full origin-left bg-black 
+        transition-transform duration-300
+        ${
+          pathname === "/about"
+            ? "scale-x-100"
+            : "scale-x-0 group-hover:scale-x-100"
+        }
+      `}
+                ></span>
+              </Link>
             </li>
-            <li className="hover:underline">
+            <li>
               <Button
                 className="rounded-none uppercase border-black hover:bg-black hover:text-white bg-transparent font-bold"
                 variant={"outline"}
@@ -72,22 +103,24 @@ export default function Navbar() {
                 </Button>
               </SheetClose>
               <SheetHeader>
-                <SheetTitle className="text-4xl text-center uppercase">
-                  Zalisma
-                </SheetTitle>
+                <Link href={"/"}>
+                  <SheetTitle className="text-4xl text-center uppercase">
+                    Zalisma
+                  </SheetTitle>
+                </Link>
                 <VisuallyHidden asChild>
                   <SheetDescription />
                 </VisuallyHidden>
               </SheetHeader>
               <ul className="mt-5 space-y-8 p-4">
                 <li className="border-b-2 border-black text-2xl uppercase font-semibold">
-                  <a href="/products">Collections</a>
+                  <a href="/collections">Collections</a>
                 </li>
                 <li className="border-b-2 border-black text-2xl uppercase font-semibold">
-                  <a href="/contact">About</a>
+                  <a href="/about">About</a>
                 </li>
                 <li className="border-b-2 border-black text-2xl uppercase font-semibold">
-                  <a href="/contact">Shop Now</a>
+                  <a href="/collections">Shop Now</a>
                 </li>
               </ul>
             </SheetContent>
