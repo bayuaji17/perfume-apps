@@ -25,7 +25,7 @@ import {
   CommandItem,
   CommandList,
 } from "@/components/ui/command";
-import { categoryPerfumes, cn, gender } from "@/lib/utils";
+import { categoryPerfumes, cn, gender, mapNotes } from "@/lib/utils";
 import {
   Popover,
   PopoverContent,
@@ -96,7 +96,7 @@ export default function AddPerfume() {
           toast.dismiss(loadingToast);
           toast.success(response.message);
           form.reset();
-          setImages([])
+          setImages([]);
         },
         onError: (error) => {
           toast.dismiss(loadingToast);
@@ -293,7 +293,11 @@ export default function AddPerfume() {
                       </FormControl>
                       <SelectContent>
                         {gender.map((data) => (
-                          <SelectItem value={data.gender} key={data.gender} className="capitalize">
+                          <SelectItem
+                            value={data.gender}
+                            key={data.gender}
+                            className="capitalize"
+                          >
                             {data.gender}
                           </SelectItem>
                         ))}
@@ -360,7 +364,9 @@ export default function AddPerfume() {
                   name={`notes.${index}.description`}
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="capitalize">{role} Note</FormLabel>
+                      <FormLabel className="capitalize">
+                        {mapNotes(role)}
+                      </FormLabel>
                       <FormControl>
                         <Textarea
                           placeholder={`Enter ${role.toLowerCase()} note with good story telling`}

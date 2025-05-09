@@ -3,7 +3,6 @@ import { Sometype_Mono, Space_Mono } from "next/font/google";
 import "./globals.css";
 import Provider from "./provider";
 import { Toaster } from "@/components/ui/sonner";
-// import Navbar from "@/components/public-component/navbar-component";
 
 const spaceMono = Space_Mono({
   weight: ["400", "700"],

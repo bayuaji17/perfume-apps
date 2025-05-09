@@ -30,6 +30,12 @@ const concentrationMap: Record<string, string> = {
 };
 
 export const mapConcentration = (key: string) => concentrationMap[key] || key;
+const notesMap: Record<string, string> = {
+  top: "Top Notes",
+  middle: "Middle Notes",
+  base: "Base Notes",
+};
+export const mapNotes = (key: string) => notesMap[key] || key;
 
 export const categoryPerfumes = [
   { id: "edt", label: "Eau de Toilette" },

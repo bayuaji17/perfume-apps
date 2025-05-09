@@ -113,7 +113,6 @@ export async function PATCH(
       notes: formData.get("notes"),
     };
 
-    // Hanya validasi field yang ada
     const partialSchema = perfumeScheme.partial(); // semua field opsional
     const parsed = partialSchema.safeParse({
       ...rawData,
@@ -156,7 +155,7 @@ export async function PATCH(
       uploadedImages.push(...results);
     }
 
-    // Pastikan parfum-nya ada
+
     const existingPerfume = await prisma.perfume.findUnique({ where: { id } });
     if (!existingPerfume) {
       return NextResponse.json({ error: "Perfume not found" }, { status: 404 });

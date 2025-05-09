@@ -14,7 +14,7 @@ import {
   ChevronRight,
   ChevronsLeft,
   ChevronsRight,
-  // Eye,
+  Eye,
   Pen,
   Search,
   Trash,
@@ -91,7 +91,7 @@ export default function PerfumesTable() {
   );
 
   return (
-    <div>
+    <>
       <div className="flex justify-end gap-4 items-center">
         <div className="flex relative">
           <Search size={18} strokeWidth="1.2px" className="absolute inset-2" />
@@ -164,13 +164,14 @@ export default function PerfumesTable() {
                   <TableCell>{formatDate(perfumes.updatedAt)}</TableCell>
                   <TableCell>
                     <span className="flex items-center justify-center space-x-2">
-                      {/* <Link href={`/dashboard/perfumes/${perfumes.id}`}>
-                        <Eye
-                          size={20}
-                          strokeWidth="1.5px"
-                          className="cursor-pointer hover:text-blue-500"
-                        />
-                      </Link> */}
+                      <Button asChild>
+                        <Link href={`/collections/${perfumes.id}`}>
+                          <Eye
+                            size={20}
+                            strokeWidth="1.5px"
+                          />
+                        </Link>
+                      </Button>
                       <Button
                         variant={"outline"}
                         onClick={() => {
@@ -260,6 +261,6 @@ export default function PerfumesTable() {
           </Button>
         </div>
       </div>
-    </div>
+    </>
   );
 }

@@ -6,23 +6,8 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "madeforhmns.com",
-        pathname: "/cdn/shop/files/**",
-      },
-      {
-        protocol: "https",
-        hostname: "onixfragrance.co.id",
-        pathname: "/cdn/shop/files/**",
-      },
-      {
-        protocol: "https",
         hostname: "images.unsplash.com",
         pathname: "/**",
-      },
-      {
-        protocol: "https",
-        hostname: "www.saffnco.com",
-        pathname: "/_next/static/media/**",
       },
       {
         protocol: "https",
