@@ -3,10 +3,10 @@ import DetailPerfume from "@/components/public-component/detail-perfume";
 export default async function DetailsPages({
   params,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  console.log(id);
+
   return (
     <>
       <DetailPerfume id={id} />
