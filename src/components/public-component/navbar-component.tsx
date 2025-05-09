@@ -114,13 +114,13 @@ export default function Navbar() {
               </SheetHeader>
               <ul className="mt-5 space-y-8 p-4">
                 <li className="border-b-2 border-black text-2xl uppercase font-semibold">
-                  <a href="/collections">Collections</a>
+                  <Link href="/collections">Collections</Link>
                 </li>
                 <li className="border-b-2 border-black text-2xl uppercase font-semibold">
-                  <a href="/about">About</a>
+                  <Link href="/about">About</Link>
                 </li>
                 <li className="border-b-2 border-black text-2xl uppercase font-semibold">
-                  <a href="/collections">Shop Now</a>
+                  <Link href="/collections">Shop Now</Link>
                 </li>
               </ul>
             </SheetContent>
