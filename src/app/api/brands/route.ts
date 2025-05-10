@@ -1,4 +1,4 @@
-import { ProtectApi } from "@/lib/auth-protect";
+import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
 import { Prisma } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
@@ -72,8 +72,10 @@ export async function GET(req: NextRequest) {
 }
 
 export async function POST(req: NextRequest) {
-  const unauthorized = await ProtectApi(req);
-  if (unauthorized) return unauthorized;
+  const session = await auth();
+  if (!session) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
 
   try {
     const body = await req.json();

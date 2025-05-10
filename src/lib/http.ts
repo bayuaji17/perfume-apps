@@ -19,6 +19,7 @@ const createHttpClient = (options: HttpClientOptions = {}): AxiosInstance => {
     timeout = 30000,
     defaultContentType = ContentType.JSON,
     authTokenName = "authjs.session-token",
+    // authTokenName = "__Secure-authjs.session-token",
   } = options;
 
   const instance = axios.create({
@@ -36,7 +37,6 @@ const createHttpClient = (options: HttpClientOptions = {}): AxiosInstance => {
       config.headers.Authorization = `Bearer ${token}`;
     }
 
-
     if (config.data instanceof FormData && config.headers) {
       delete config.headers["Content-Type"];
     }
@@ -47,19 +47,15 @@ const createHttpClient = (options: HttpClientOptions = {}): AxiosInstance => {
   return instance;
 };
 
-
 export const httpClient = createHttpClient();
-
 
 export const httpFormClient = createHttpClient({
   defaultContentType: ContentType.FORM_DATA,
 });
 
-
 export const apiClient = {
   json: httpClient,
   form: httpFormClient,
-  
- 
+
   custom: (options: HttpClientOptions) => createHttpClient(options),
 };

@@ -5,7 +5,7 @@ import { z } from "zod";
 import { del, put } from "@vercel/blob";
 import { perfumeScheme } from "@/lib/zod-scheme/perfume-scheme";
 import { imageFileScheme } from "@/lib/zod-scheme/image-scheme";
-import { ProtectApi } from "@/lib/auth-protect";
+import { auth } from "@/auth";
 // Get All Perfumes
 export async function GET(req: NextRequest) {
   const url = new URL(req.url);
@@ -89,8 +89,10 @@ export async function GET(req: NextRequest) {
 
 // Create Perfume
 export async function POST(req: NextRequest) {
-  const unauthorized = await ProtectApi(req);
-  if (unauthorized) return unauthorized;
+  const session = await auth();
+  if (!session) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
 
   const uploadedImages: { imageUrl: string; displayOrder: number }[] = [];
 

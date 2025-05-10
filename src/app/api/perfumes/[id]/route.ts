@@ -1,4 +1,4 @@
-import { ProtectApi } from "@/lib/auth-protect";
+import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
 import { imageFileScheme } from "@/lib/zod-scheme/image-scheme";
 import { perfumeScheme } from "@/lib/zod-scheme/perfume-scheme";
@@ -49,15 +49,15 @@ export async function GET(
             description: true,
           },
         },
-        checkoutLinks:{
-          select:{
-            perfumeId:true,
-            id:true,
-            platform:true,
-            link:true,
-            status:true,
-          }
-        }
+        checkoutLinks: {
+          select: {
+            perfumeId: true,
+            id: true,
+            platform: true,
+            link: true,
+            status: true,
+          },
+        },
       },
     });
 
@@ -78,8 +78,10 @@ export async function PATCH(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  const unauthorized = await ProtectApi(req);
-  if (unauthorized) return unauthorized;
+  const session = await auth();
+  if (!session) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
   const uploadedImages: { imageUrl: string; displayOrder: number }[] = [];
   const { id } = await params;
 
@@ -154,7 +156,6 @@ export async function PATCH(
       );
       uploadedImages.push(...results);
     }
-
 
     const existingPerfume = await prisma.perfume.findUnique({ where: { id } });
     if (!existingPerfume) {
@@ -236,8 +237,10 @@ export async function DELETE(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  const unauthorized = await ProtectApi(req);
-  if (unauthorized) return unauthorized;
+  const session = await auth();
+  if (!session) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
   try {
     const { id } = await params;
     const deletedPerfume = await prisma.perfume.delete({

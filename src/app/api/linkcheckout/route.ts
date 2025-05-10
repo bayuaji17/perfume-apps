@@ -1,4 +1,4 @@
-import { ProtectApi } from "@/lib/auth-protect";
+import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
 import {
   COLinkSchemeEditDetails,
@@ -7,8 +7,10 @@ import {
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
-  const unauthorized = await ProtectApi(req);
-  if (unauthorized) return unauthorized;
+  const session = await auth();
+  if (!session) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
 
   try {
     const body = await req.json();
@@ -75,8 +77,10 @@ export async function POST(req: NextRequest) {
 }
 
 export async function PATCH(req: NextRequest) {
-  const unauthorized = await ProtectApi(req);
-  if (unauthorized) return unauthorized;
+  const session = await auth();
+  if (!session) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
 
   try {
     const body = await req.json();
@@ -119,8 +123,10 @@ export async function PATCH(req: NextRequest) {
 }
 
 export async function DELETE(req: NextRequest) {
-  const unauthorized = await ProtectApi(req);
-  if (unauthorized) return unauthorized;
+  const session = await auth();
+  if (!session) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
 
   try {
     const body = await req.json();
