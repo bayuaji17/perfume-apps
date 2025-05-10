@@ -18,8 +18,7 @@ const createHttpClient = (options: HttpClientOptions = {}): AxiosInstance => {
     baseURL = process.env.NEXT_PUBLIC_BASE_URL,
     timeout = 30000,
     defaultContentType = ContentType.JSON,
-    authTokenName = "authjs.session-token",
-    // authTokenName = "__Secure-authjs.session-token",
+    authTokenName = "__Secure-authjs.session-token",
   } = options;
 
   const instance = axios.create({
