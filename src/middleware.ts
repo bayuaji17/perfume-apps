@@ -1,20 +1,22 @@
-import {NextRequest, NextResponse} from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 export async function middleware(req: NextRequest) {
+  const token =
+    req.cookies.get("authjs.session-token") ||
+    req.cookies.get("__Secure-authjs.session-token");
 
-    const token = req.cookies.get("authjs.session-token");
-    const isDashboardPath = req.nextUrl.pathname.startsWith("/dashboard");
+  const isDashboardPath = req.nextUrl.pathname.startsWith("/dashboard");
 
-    if (isDashboardPath && !token) {
-        return NextResponse.redirect(new URL("/signin", req.url));
-    }
+  if (isDashboardPath && !token) {
+    return NextResponse.redirect(new URL("/signin", req.url));
+  }
 
-    if (!isDashboardPath && token && req.nextUrl.pathname === "/signin" ) {
-        return NextResponse.redirect(new URL("/dashboard", req.url));
-    }
+  if (!isDashboardPath && token && req.nextUrl.pathname === "/signin") {
+    return NextResponse.redirect(new URL("/dashboard", req.url));
+  }
 
-    return NextResponse.next();
+  return NextResponse.next();
 }
 
 export const config = {
-    matcher: ["/dashboard/:path*","/signin"],
+  matcher: ["/dashboard/:path*", "/signin"],
 };

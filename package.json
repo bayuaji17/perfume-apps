@@ -4,10 +4,10 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
-    "build": "npx prisma generate && next build",
     "start": "next start",
     "lint": "next lint",
-    "postinstall": "npx prisma generate"
+    "build": "npx prisma generate && next build",
+    "postinstall": "npx prisma migrate deploy"
   },
   "dependencies": {
     "@auth/prisma-adapter": "^2.9.0",

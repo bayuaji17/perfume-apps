@@ -92,7 +92,10 @@ export default function Navbar() {
                 <Menu className="size-6" />
               </Button>
             </SheetTrigger>
-            <SheetContent side="top" className="w-full h-full p-0 border-none">
+            <SheetContent
+              side="bottom"
+              className="w-full h-full p-0 border-none"
+            >
               <SheetClose asChild>
                 <Button
                   variant="ghost"
@@ -103,24 +106,32 @@ export default function Navbar() {
                 </Button>
               </SheetClose>
               <SheetHeader>
-                <Link href={"/"}>
-                  <SheetTitle className="text-4xl text-center uppercase">
-                    Zalisma
-                  </SheetTitle>
-                </Link>
+                <SheetClose asChild>
+                  <Link href={"/"}>
+                    <SheetTitle className="text-4xl text-center uppercase">
+                      Zalisma
+                    </SheetTitle>
+                  </Link>
+                </SheetClose>
                 <VisuallyHidden asChild>
                   <SheetDescription />
                 </VisuallyHidden>
               </SheetHeader>
               <ul className="mt-5 space-y-8 p-4">
                 <li className="border-b-2 border-black text-2xl uppercase font-semibold">
-                  <Link href="/collections">Collections</Link>
+                  <SheetClose asChild>
+                    <Link href="/collections">Collections</Link>
+                  </SheetClose>
                 </li>
                 <li className="border-b-2 border-black text-2xl uppercase font-semibold">
-                  <Link href="/about">About</Link>
+                  <SheetClose asChild>
+                    <Link href="/about">About</Link>
+                  </SheetClose>
                 </li>
                 <li className="border-b-2 border-black text-2xl uppercase font-semibold">
-                  <Link href="/collections">Shop Now</Link>
+                  <SheetClose asChild>
+                    <Link href="/collections">Shop Now</Link>
+                  </SheetClose>
                 </li>
               </ul>
             </SheetContent>
