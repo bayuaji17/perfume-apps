@@ -17,7 +17,8 @@ export async function middleware(req: NextRequest) {
   const perfumeDetailMatch = req.nextUrl.pathname.match(
     /^\/dashboard\/perfumes\/([^\/]+)$/
   );
-  if (perfumeDetailMatch) {
+
+  if (perfumeDetailMatch && perfumeDetailMatch[1] !== "add-perfume") {
     const id = perfumeDetailMatch[1];
     const redirectUrl = new URL(`/collections/${id}`, req.url);
     return NextResponse.redirect(redirectUrl, 301);
