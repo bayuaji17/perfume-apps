@@ -14,6 +14,15 @@ export async function middleware(req: NextRequest) {
     return NextResponse.redirect(new URL("/dashboard", req.url));
   }
 
+  const perfumeDetailMatch = req.nextUrl.pathname.match(
+    /^\/dashboard\/perfumes\/([^\/]+)$/
+  );
+  if (perfumeDetailMatch) {
+    const id = perfumeDetailMatch[1];
+    const redirectUrl = new URL(`/collections/${id}`, req.url);
+    return NextResponse.redirect(redirectUrl, 301);
+  }
+
   return NextResponse.next();
 }
 

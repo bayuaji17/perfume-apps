@@ -166,7 +166,7 @@ export default function Brand() {
       </div>
       {/* Pagination */}
       <div className="flex flex-col-reverse gap-4 sm:flex-row items-center space-x-2 justify-between">
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2">
           <span>Row per pages:</span>
           <Select
             value={params.pageSize.toString()}

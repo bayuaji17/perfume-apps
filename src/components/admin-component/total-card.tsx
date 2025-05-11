@@ -28,8 +28,8 @@ export default function TotalCards() {
   });
   const brands = totalBrand?.data.total;
   return (
-    <div className="flex gap-2 my-10">
-      <Card className="w-1/2 bg-black">
+    <div className="flex flex-col md:flex-row gap-2 my-10">
+      <Card className="w-full md:w-1/2 bg-black">
         <CardContent>
           <div className="flex justify-between items-center gap-2 ">
             <h1 className="text-3xl capitalize text-white">Total Perfumes</h1>
@@ -40,7 +40,7 @@ export default function TotalCards() {
           </span>
         </CardContent>
       </Card>
-      <Card className="w-1/2 border-black">
+      <Card className="w-full md:w-1/2 border-black">
         <CardContent>
           <div className="flex justify-between items-center">
             <h1 className="text-3xl capitalize">Total Brands</h1>

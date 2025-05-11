@@ -41,7 +41,7 @@ import TableLoading from "../table-skeleton";
 import DeletePerfume from "./delete-perfume";
 
 export default function PerfumesTable() {
-  const [pagination, setPagination] = useState<Params>({
+  const [params, setParams] = useState<Params>({
     currentPage: 1,
     pageSize: 5,
     search: "",
@@ -52,30 +52,30 @@ export default function PerfumesTable() {
   const router = useRouter();
   const debounce = useDebounce(searchInput, 400);
   useEffect(() => {
-    setPagination((prev) => ({
+    setParams((prev) => ({
       ...prev,
       search: debounce,
       currentPage: 1,
     }));
   }, [debounce]);
   const { data, isLoading } = usePerfumes({
-    page: pagination.currentPage,
-    pageSize: pagination.pageSize,
-    search: pagination.search,
+    page: params.currentPage,
+    pageSize: params.pageSize,
+    search: params.search,
   });
 
   const handleSearch = (value: string) => {
     setSearchInput(value);
   };
   const handlePageSize = (value: string) => {
-    setPagination((prev) => ({
+    setParams((prev) => ({
       ...prev,
       pageSize: Number(value),
       currentPage: 1,
     }));
   };
   const gotoPage = (page: number) => {
-    setPagination((prev) => ({
+    setParams((prev) => ({
       ...prev,
       currentPage: page,
     }));
@@ -84,9 +84,9 @@ export default function PerfumesTable() {
   const totalCount = data?.data.total || (0 as number);
   const totalPages = data?.data.totalPages || (0 as number);
 
-  const startItem = (pagination.currentPage - 1) * pagination.pageSize + 1;
+  const startItem = (params.currentPage - 1) * params.pageSize + 1;
   const endItem = Math.min(
-    pagination.currentPage * pagination.pageSize,
+    params.currentPage * params.pageSize,
     totalCount
   );
 
@@ -136,7 +136,7 @@ export default function PerfumesTable() {
               perfumes.map((perfumes: Perfumes, index: number) => (
                 <TableRow key={perfumes.id} className="border-black">
                   <TableCell>
-                    {(pagination.currentPage - 1) * pagination.pageSize +
+                    {(params.currentPage - 1) * params.pageSize +
                       index +
                       1}
                   </TableCell>
@@ -206,11 +206,11 @@ export default function PerfumesTable() {
         </Table>
       </div>
       {/* Pagination */}
-      <div className="flex flex-col-reverse gap-4 sm:flex-row items-center space-x-2 justify-between">
-        <div className="flex items-center gap-2">
+     <div className="flex flex-col-reverse gap-4 sm:flex-row items-center space-x-2 justify-between">
+        <div className="flex flex-wrap items-center gap-2">
           <span>Row per pages:</span>
           <Select
-            value={pagination.pageSize.toString()}
+            value={params.pageSize.toString()}
             onValueChange={handlePageSize}
           >
             <SelectTrigger className="border-black">
@@ -233,29 +233,29 @@ export default function PerfumesTable() {
           <Button
             variant="outline"
             onClick={() => gotoPage(1)}
-            disabled={pagination.currentPage === 1}
+            disabled={params.currentPage === 1}
           >
             <ChevronsLeft />
           </Button>
           <Button
             variant="outline"
-            onClick={() => gotoPage(pagination.currentPage - 1)}
-            disabled={pagination.currentPage === 1}
+            onClick={() => gotoPage(params.currentPage - 1)}
+            disabled={params.currentPage === 1}
           >
             <ChevronLeft />
           </Button>
-          <Button>{pagination.currentPage}</Button>
+          <Button>{params.currentPage}</Button>
           <Button
             variant="outline"
-            onClick={() => gotoPage(pagination.currentPage + 1)}
-            disabled={pagination.currentPage >= totalPages}
+            onClick={() => gotoPage(params.currentPage + 1)}
+            disabled={params.currentPage >= totalPages}
           >
             <ChevronRight />
           </Button>
           <Button
             variant="outline"
             onClick={() => gotoPage(totalPages)}
-            disabled={pagination.currentPage >= totalPages}
+            disabled={params.currentPage >= totalPages}
           >
             <ChevronsRight />
           </Button>
