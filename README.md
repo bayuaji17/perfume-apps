@@ -66,20 +66,6 @@ npm run dev
 
 Visit `http://localhost:3000` to view the app in your browser.
 
-## 📁 Project Structure
-
-```
-.
-├── app/                # Next.js pages and routing
-├── components/         # Reusable UI components
-├── prisma/             # Prisma schema and migrations
-├── public/             # Static assets
-├── styles/             # Tailwind CSS configurations
-├── .env                # Environment variables
-├── next.config.js      # Next.js configuration
-└── README.md           # Project documentation
-```
-
 ## 📸 Image Storage
 
 Perfume images are uploaded and served via **Vercel Blob**, enabling fast and scalable CDN delivery.
