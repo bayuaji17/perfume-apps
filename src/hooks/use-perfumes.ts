@@ -1,7 +1,12 @@
 import { httpClient, httpFormClient } from "@/lib/http";
 import { Perfumes } from "@/lib/types/inteface";
 import { formScheme } from "@/lib/zod-scheme/perfume-scheme";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  keepPreviousData,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
 import { AxiosError, AxiosResponse } from "axios";
 import { z } from "zod";
 type Params = {
@@ -16,7 +21,7 @@ type CreatePerfumeResponse = {
 type CreatePerfumeInput = {
   values: z.infer<typeof formScheme>;
   images: File[];
-  id?:string
+  id?: string;
 };
 export function usePerfumes({ page, pageSize, search }: Params) {
   return useQuery({
@@ -27,6 +32,9 @@ export function usePerfumes({ page, pageSize, search }: Params) {
       );
       return response;
     },
+    placeholderData: keepPreviousData,
+    staleTime: 1000 * 60,
+    gcTime: 10 * 60,
   });
 }
 
@@ -63,17 +71,19 @@ export function usePerfumesById(id: string | null) {
   return useQuery<Perfumes>({
     queryKey: ["perfumes", id],
     queryFn: async () => {
-      const response: AxiosResponse<Perfumes> = await httpClient.get(`/perfumes/${id}`);
+      const response: AxiosResponse<Perfumes> = await httpClient.get(
+        `/perfumes/${id}`
+      );
       return response.data;
     },
-    enabled:!!id
+    enabled: !!id,
   });
 }
 
 export function useEditPerfume() {
   const queryClient = useQueryClient();
   return useMutation<CreatePerfumeResponse, AxiosError, CreatePerfumeInput>({
-    mutationFn: async ({ values, images,id }) => {
+    mutationFn: async ({ values, images, id }) => {
       const formData = new FormData();
       formData.append("name", values.name);
       formData.append("description", values.description);
@@ -102,7 +112,7 @@ export function useEditPerfume() {
 export function useDeletePerfume() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: async (id:string) => {
+    mutationFn: async (id: string) => {
       const { data: response } = await httpClient.delete(`/perfumes/${id}`);
       return response;
     },
